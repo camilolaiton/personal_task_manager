@@ -203,10 +203,10 @@ class Window(QDialog):
         quit()
  
 if __name__ == "__main__":
-    task_1 = Task({"id": 0, "task": "Leer libro de matematicas", "description": "Descripcion 1", "limit_date": datetime.now()})
-    task_2 = Task({"id": 1, "task": "Buscar nuevo libro", "description": "Descripcion 2", "limit_date": datetime(2021, 10, 3)})
-    task_3 = Task({"id": 2, "task": "Terminar tarea de taller", "description": "Descripcion 3", "limit_date": datetime(2020, 4, 4, 9, 30)})
-    task_4 = Task({"id": 3, "task": "Terminar taller ing. soft. 2", "description": "Descripcion 3", "limit_date": datetime(2020, 5, 4, 9, 30)})
+    task_1 = Task({"id": 0, "task": "Read Elon Musk's book", "description": "Descripcion 1", "limit_date": datetime.now()})
+    task_2 = Task({"id": 1, "task": "Search Camilo Laiton on Internet", "description": "Descripcion 2", "limit_date": datetime(2021, 10, 3)})
+    task_3 = Task({"id": 2, "task": "Finish The Avengers's movie", "description": "Descripcion 3", "limit_date": datetime(2020, 4, 4, 9, 30)})
+    task_4 = Task({"id": 3, "task": "Search University of Magdalena on Google", "description": "Descripcion 3", "limit_date": datetime(2020, 5, 4, 9, 30)})
 
     task_manager_1 = task_manager("")
     task_manager_1.add_task(task_1)

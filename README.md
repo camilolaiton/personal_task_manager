@@ -2,6 +2,8 @@
 
 This is a personal task manager made in python with PyQt5.
 
+[![PersonalTaskManager](https://i.ibb.co/3CzJcs2/personal-task-image.jpg "PersonalTaskManager")](https://i.ibb.co/3CzJcs2/personal-task-image.jpg "PersonalTaskManager")
+
 ## Features
 1. Add tasks.
 2. Edit tasks.
