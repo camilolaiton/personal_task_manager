@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QInputDialog, QDialog, QLineEdit, QMessageBox
 from PyQt5.QtGui import QIcon
+import re
 
 import sys
 sys.path.append("../")
@@ -83,6 +84,13 @@ class Window(QDialog):
 
         return myQTaskItem
 
+    def get_task_id_selected_custom_item(self):
+        row = self.listWidget.currentRow()
+        widget = self.listWidget.itemWidget(self.listWidget.item(row))
+        result_re_search = re.findall('([0-9]{1,2})', widget.text_id_task.text())
+
+        return row, int(result_re_search[0])
+
     def set_tasks(self):
         
         self.listWidget.clear()
@@ -120,13 +128,13 @@ class Window(QDialog):
         if ok_task_limit_date:
             print("{}".format(task_limit_date))
 
-        new_task = Task({"id": len(self.listWidget), "task": task_info, "description": task_description, "limit_date": task_limit_date})
+        new_task = Task({"id": len(self.task_manager.list_of_tasks), "task": task_info, "description": task_description, "limit_date": task_limit_date})
         self.task_manager.add_task(new_task)
         self.set_tasks()
 
     def edit_task(self):
-        row = self.listWidget.currentRow()
-        gotten_task = self.task_manager.list_of_tasks[row]
+        row_list, real_task_id = self.get_task_id_selected_custom_item()
+        gotten_task = self.task_manager.read_task(real_task_id)
 
         if gotten_task is not None:
             task_info, ok_task_info = QInputDialog.getText(self, "Task edit", "Edit Task Information",
@@ -149,22 +157,20 @@ class Window(QDialog):
             gotten_task.task_info = task_info
             gotten_task.description = task_description
             gotten_task.limit_date = task_limit_date
-            self.task_manager.list_of_tasks[row] = gotten_task
+            self.task_manager.update_task(gotten_task.id, gotten_task)
             self.set_tasks()
 
     def remove_task(self):
-        row = self.listWidget.currentRow()
-        item = self.listWidget.item(row)
+        row_list, real_task_id = self.get_task_id_selected_custom_item()
  
-        if item is None:
-            return
- 
-        reply = QMessageBox.question(self, "Remove task", "Are you sure you want to remove this task? " + str(item.text()),
+        reply = QMessageBox.question(self, "Remove task", "Are you sure you want to remove this task? ",
                 QMessageBox.Yes|QMessageBox.No)
 
         if reply == QMessageBox.Yes:
-            item = self.listWidget.takeItem(row)
+            item = self.listWidget.takeItem(row_list)
+            self.task_manager.delete_task(real_task_id)
             del item
+            self.set_tasks()
   
     # def up(self):
     #     row = self.listWidget.currentRow()
@@ -181,16 +187,16 @@ class Window(QDialog):
     #         self.listWidget.setCurrentItem(item)
  
     def done_task(self):
-        row = self.listWidget.currentRow()
+        row_list, real_task_id = self.get_task_id_selected_custom_item()
 
         number_done_tasks, number_undone_tasks = self.task_manager.get_number_done_undone_tasks()
 
         print(number_done_tasks, number_undone_tasks)
 
         if (number_undone_tasks):
-            modified_task = self.task_manager.list_of_tasks[row]
+            modified_task = self.task_manager.read_task(real_task_id)
             modified_task.done = True
-            self.task_manager.update_task(row, modified_task)
+            self.task_manager.update_task(real_task_id, modified_task)
             self.set_tasks()
  
     def close_window(self):

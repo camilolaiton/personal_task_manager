@@ -53,6 +53,13 @@ class task_manager():
     def delete_task(self, task_id):
         try:
             self.list_of_tasks.pop(task_id)
+
+            new_task_id = 0
+
+            for task_it in range(0, len(self.list_of_tasks)):
+                self.list_of_tasks[new_task_id].id = new_task_id
+                new_task_id += 1
+                
         except IndexError:
             print("Non-existent task")
 
