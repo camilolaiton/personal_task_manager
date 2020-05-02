@@ -8,10 +8,10 @@ This is a personal task manager made in python with PyQt5.
 1. Add tasks.
 2. Edit tasks.
 3. Delete tasks.
+4. Persistent data.
 
 ## Future features
 1. Statistics.
-2. Persistent data.
 
 ## End
   If you want to improve this repository, please send a pull request and I will read your code. If I consider it helps then I will accept.

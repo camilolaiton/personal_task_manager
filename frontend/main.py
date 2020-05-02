@@ -96,7 +96,7 @@ class Window(QDialog):
         self.listWidget.clear()
 
         for task_it in self.task_manager.list_of_tasks:
-            print(task_it.__str__())
+            # print(task_it.__str__())
 
             if not (task_it.done):
                 myQTaskItem = Window.create_personalized_task_item(task_it)
@@ -114,19 +114,19 @@ class Window(QDialog):
         task_info, ok_task_info = QInputDialog.getText(self, "Task edit", "Edit Task Information",
                                         QLineEdit.Normal, "")
         
-        if ok_task_info and task_info != None:
-            print("{}".format(task_info))
+        if not ok_task_info or task_info == None:
+            return
         
         task_description, ok_task_description = QInputDialog.getText(self, "Task edit", "Edit Task Description",
                                         QLineEdit.Normal, "")
         
-        if ok_task_description and task_description != None:
-            print("{}".format(task_description))
+        if not ok_task_description or task_description == None:
+            return
 
         task_limit_date, ok_task_limit_date = DateDialog.getDateTime()
 
-        if ok_task_limit_date:
-            print("{}".format(task_limit_date))
+        if not ok_task_limit_date:
+            return
 
         new_task = Task({"id": len(self.task_manager.list_of_tasks), "task": task_info, "description": task_description, "limit_date": task_limit_date})
         self.task_manager.add_task(new_task)
@@ -191,7 +191,7 @@ class Window(QDialog):
 
         number_done_tasks, number_undone_tasks = self.task_manager.get_number_done_undone_tasks()
 
-        print(number_done_tasks, number_undone_tasks)
+        # print(number_done_tasks, number_undone_tasks)
 
         if (number_undone_tasks):
             modified_task = self.task_manager.read_task(real_task_id)
@@ -200,19 +200,11 @@ class Window(QDialog):
             self.set_tasks()
  
     def close_window(self):
+        self.task_manager.save_tasks()
         quit()
  
 if __name__ == "__main__":
-    task_1 = Task({"id": 0, "task": "Read Elon Musk's book", "description": "Descripcion 1", "limit_date": datetime.now()})
-    task_2 = Task({"id": 1, "task": "Search Camilo Laiton on Internet", "description": "Descripcion 2", "limit_date": datetime(2021, 10, 3)})
-    task_3 = Task({"id": 2, "task": "Finish The Avengers's movie", "description": "Descripcion 3", "limit_date": datetime(2020, 4, 4, 9, 30)})
-    task_4 = Task({"id": 3, "task": "Search University of Magdalena on Google", "description": "Descripcion 3", "limit_date": datetime(2020, 5, 4, 9, 30)})
-
-    task_manager_1 = task_manager("")
-    task_manager_1.add_task(task_1)
-    task_manager_1.add_task(task_2)
-    task_manager_1.add_task(task_3)
-    task_manager_1.add_task(task_4)
+    task_manager_1 = task_manager("data/serialized_tasks.dat")
 
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
